@@ -157,3 +157,30 @@ CALL gradeEvaluation(75, @grade);
 SELECT @grade AS 'final result';
 
 ```
+
+Array in Procedure:
+
+Lets convert a column data into array:
+
+```sql
+SELECT JSON_ARRAYAGG(column_name) FROM db_name.tbl_name
+WHERE condition1 and condition2
+```
+
+Note: To make the array distinct
+
+```sql
+SELECT JSON_ARRAYAGG(author_name) AS distinct_authors
+FROM (SELECT DISTINCT author_name FROM blogs) AS distinct_authors_subquery;
+```
+
+Now Let's check the length of the array:
+
+```sql
+SELECT JSON_LENGTH(JSON_ARRAYAGG(author_name)) AS distinct_authors
+FROM (SELECT DISTINCT author_name FROM blogs) AS distinct_authors_subquery;
+
+```
+
+let's make a procedure:
+
