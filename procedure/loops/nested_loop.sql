@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE PROCEDURE nested_loop(IN cnt INT)
+CREATE PROCEDURE nested_loop2(IN cnt INT)
 BEGIN
 DECLARE i INT DEFAULT 0;
 DECLARE j INT DEFAULT 0;
@@ -18,6 +18,6 @@ END WHILE;
 
 SELECT res;
 END //
-DECLARE;
+DELIMITER;
 
-CALL nested_loop(5);
+CALL nested_loopx(5);
