@@ -182,5 +182,14 @@ FROM (SELECT DISTINCT author_name FROM blogs) AS distinct_authors_subquery;
 
 ```
 
+Now Let's print the i-th index of an array:
+
+```sql
+SELECT  JSON_UNQUOTE(JSON_EXTRACT(( SELECT JSON_ARRAYAGG(author_name)
+FROM (SELECT DISTINCT author_name FROM blogs) AS dist_auth_subquery), CONCAT('$[',2 , ']'))); /* here 0,1,2 are the array index */
+
+```
+
+
 let's make a procedure:
 
