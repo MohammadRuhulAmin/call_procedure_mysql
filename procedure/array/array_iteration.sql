@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE I()
+CREATE PROCEDURE IterateOverJsonArray()
 BEGIN
     DECLARE json_array_elem JSON;
     DECLARE author_name VARCHAR(255);
@@ -35,3 +35,5 @@ BEGIN
 END //
 
 DELIMITER ;
+
+CALL IterateOverJsonArray();
