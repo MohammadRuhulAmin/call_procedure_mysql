@@ -160,6 +160,18 @@ SELECT @grade AS 'final result';
 
 ```
 
+Before that we need to learn JSON:
+JSON stands for JavaScript Object Notation.
+
+JSON Functions:
+MySQL provides a set of functions to manipulate and extract data from JSON objects and arrays. Some key functions are:
+`JSON_ARRAY()`: Creates a JSON array from provided values.
+`JSON_OBJECT()`: Creates a JSON object from key-value pairs.
+`JSON_EXTRACT()`: Extracts data from a JSON document.
+`JSON_UNQUOTE()`: Removes quotes from JSON string values.
+`JSON_ARRAYAGG()`: Aggregates values into a JSON array.
+`JSON_LENGTH()`: Returns the length of a JSON array or object.
+
 Array in Procedure:
 
 Lets convert a column data into array:
@@ -188,10 +200,25 @@ Now Let's print the i-th index of an array:
 
 ```sql
 SELECT  JSON_UNQUOTE(JSON_EXTRACT(( SELECT JSON_ARRAYAGG(author_name)
-FROM (SELECT DISTINCT author_name FROM blogs) AS dist_auth_subquery), CONCAT('$[',2 , ']'))); /* here 0,1,2 are the array index */
+FROM (SELECT DISTINCT author_name FROM blogs) AS dist_auth_subquery), CONCAT('$[',2 ,']'))); /* here 0,1,2 are the array index */
 
 ```
 
 
-let's make a procedure:
+let's make a procedure which will store an array inside a variable and print the array :
+
+```sql
+DELIMITER //
+CREATE PROCEDURE StoreAndPrintJSON()
+BEGIN
+    DECLARE json_result JSON;
+    -- Storing JSON array in the variable
+    SET json_result = JSON_ARRAY(1, "apple", TRUE, NULL);
+    -- Printing the stored JSON array
+    SELECT json_result AS my_json_array;
+END //
+DELIMITER ;
+
+CALL StoreAndPrintJSON()
+```
 
