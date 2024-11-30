@@ -1,4 +1,7 @@
-# Procedure 
+# Procedure in MySqL
+
+A procedure in MySQL is a stored program or a set of SQL statements that are stored on the database server and can be executed on demand. Procedures allow you to encapsulate repetitive or complex operations, reducing duplication and improving maintainability.
+
 
 create procedure syntax:
 
