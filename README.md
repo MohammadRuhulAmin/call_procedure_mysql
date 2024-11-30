@@ -30,3 +30,10 @@ DELIMITER;
 
 CALL procedure_name(500,10);
 ```
+
+To drop a procedure:
+
+```sql
+drop procedure procedure_name;
+```
+
