@@ -387,3 +387,8 @@ DELIMITER ;
 CALL IterateOverJSONObject();
 
 ```
+
+If a process is running inside an INFINITY LOOP :
+
+Step1: Find the process using `SHOW PROCESSLIST;`
+Step2: Kill the process using the ID: `KILL <ID>`
