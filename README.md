@@ -43,7 +43,7 @@ To pass table / database dynamically:
 
 ```sql
 DELIMITER //
-CREATE PROCEDURE my_procedure(IN lim INT, IN tbl_name VARCHAR(25), IN ofset INT)
+CREATE PROCEDURE my_procedure(IN lim INT, IN db_name VARCHAR(25),IN tbl_name VARCHAR(25), IN ofset INT)
 BEGIN 
     SET @query = CONCAT('SELECT * FROM ', tbl_name, ' ORDER BY id LIMIT ', lim, ' OFFSET ', ofset);
     PREPARE stmt FROM @query; /*This tells MySQL to prepare the query and associate it with the stmt identifier.*/
@@ -52,7 +52,7 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL my_procedure(10,'table_name',100);
+CALL my_procedure(10,'db_name','table_name',100);
 
 ```
 
