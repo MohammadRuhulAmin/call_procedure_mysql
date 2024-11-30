@@ -1,6 +1,8 @@
 # Procedure in MySqL
 
-A procedure in MySQL is a stored program or a set of SQL statements that are stored on the database server and can be executed on demand. Procedures allow you to encapsulate repetitive or complex operations, reducing duplication and improving maintainability.
+A procedure in MySQL is a stored program or a set of SQL statements that are stored on the database server and can be executed on demand. Procedures allow you to encapsulate repetitive or complex operations, reducing duplication and improving maintainability. Procedures in MySQL operate synchronously. Therefore, for CPU-intensive tasks, it is highly recommended to use an asynchronous approach. Executing a CPU-intensive task within a procedure can block the process, causing the system to remain unresponsive until the task is completed. Each client connection to the database server, authenticated with a username and password, is assigned a dedicated thread to handle command execution.
+
+![alt text](./public/images/image.png)
 
 
 create procedure syntax:
