@@ -86,3 +86,31 @@ CALL myxk_xx(10);
 
 
 ```
+
+Nested while loop in procedure Example:
+
+
+```sql
+DELIMITER //
+CREATE PROCEDURE ex_loop()
+BEGIN
+  DECLARE counter INT DEFAULT 0;
+  DECLARE j INT DEFAULT 0;
+  DECLARE i INT DEFAULT 0;
+  DECLARE res VARCHAR(255) DEFAULT "";  
+  WHILE i<=10 DO
+    SET res = CONCAT("x",res);
+    SET i = i + 1;
+    SET j = 0;
+    WHILE j<=2 DO
+      SET res = CONCAT("_",res);
+      SET j = j + 1;
+    
+    END WHILE;
+  END WHILE;
+  SELECT res;
+END //
+DELIMITER;
+CALL ex_loop();
+
+```
