@@ -606,3 +606,9 @@ DELIMITER ;
 SELECT getMultipleRecordsFromQuery();
 
 ```
+
+
+Lets Drop a Function: 
+```sql
+DROP FUNCTION getMultipleRecordsFromQuery;
+```
