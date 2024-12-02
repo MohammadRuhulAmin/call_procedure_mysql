@@ -480,6 +480,41 @@ END //
 
 DELIMITER ;
 
+```
 
 
+Explanation:
+
+`function_name`: Name of the function you are creating.
+`parameter_name`: Input parameter(s) for the function. You can define multiple parameters separated by commas.
+`datatype`: Data type for the input parameter(s).
+`RETURNS return_datatype`: Specifies the data type of the value returned by the function.
+`DETERMINISTIC`:
+- `DETERMINISTIC`: The function always produces the same result for the same input.
+- `NON-DETERMINISTIC`: The function may produce different results for the same input (e.g., functions using NOW() or RAND()).
+
+SQL Characteristics (optional):
+    `CONTAINS SQL`: The function contains SQL statements that do not read or write data.
+    `NO SQL`: The function contains no SQL statements.
+    `READS SQL DATA`: The function contains SQL statements that read data.
+    `MODIFIES SQL DATA`: The function contains SQL statements that modify data.
+
+BEGIN...END: Encloses the body of the function.
+RETURN: Specifies the value the function should return.
+
+Example:
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION square(num INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    RETURN num * num;
+END //
+
+DELIMITER ;
+
+SELECT square(6);
 ```

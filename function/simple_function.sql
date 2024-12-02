@@ -1,0 +1,13 @@
+DELIMITER //
+
+CREATE FUNCTION square(num INT)
+RETURNS INT
+DETERMINISTIC
+CONTAINS SQL
+BEGIN
+    RETURN num * num;
+END //
+
+DELIMITER ;
+
+select square();
