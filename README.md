@@ -459,3 +459,27 @@ CALL division(12,@resux);
 SELECT @resux;
 
 ```
+
+
+# Function In MySqL:
+
+Syntax:
+
+```sql
+
+DELIMITER //
+
+CREATE FUNCTION function_name(parameter_name datatype, ...)
+RETURNS return_datatype
+[DETERMINISTIC | NON-DETERMINISTIC]
+[CONTAINS SQL | NO SQL | READS SQL DATA | MODIFIES SQL DATA]
+BEGIN
+    -- Function logic
+    RETURN return_value;
+END //
+
+DELIMITER ;
+
+
+
+```
