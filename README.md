@@ -856,5 +856,9 @@ CALL transfer_amount(101, 102, 200.00);
 # section 8: project
 
 - STEP 1: Data migration from Source Database to Destination Database in 9 tables using a procedure.
+    ```https://github.com/MohammadRuhulAmin/call_procedure_mysql/blob/main/project/chx_data_migration_procedure.sql```
 - STEP 2: Create a procedure using loop to run the STEP 1 Procedure, created.
+    ```https://github.com/MohammadRuhulAmin/call_procedure_mysql/blob/main/project/procedure_running_loop.sql```
 - STEP 3: Migrate the necessary data from unsuccess_log table using procedure.
+    ```https://github.com/MohammadRuhulAmin/call_procedure_mysql/blob/main/project/unsuccess_log_migration.sql```
+
