@@ -671,3 +671,61 @@ SELECT safe_divisionx(1,0);
 ![alt text](./public/images/error.png)
 
 the `MESSAGE_TEXT` will be displayed in the sql Log, if you dont want to handle the error.
+
+What is  "SQLSTATE '45000'" ?
+
+- SQLSTATE codes are 5-character alphanumeric codes that categorize errors in SQL-based systems.
+- They follow a standard format defined by ISO/IEC 9075 (SQL standard).
+- Each code has a specific meaning, allowing consistent error handling across database implementations.
+- 45000 is a generic SQLSTATE code that indicates a user-defined exception.
+- It is used in conjunction with the SIGNAL statement in MySQL to raise custom errors.
+
+when you execute:
+
+```sql
+SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT = 'This is an error Occured';
+```
+This rises an error with:
+- SQLSTATE code 45000, marking it as a user-defined error.
+- Custom error message defined by the MESSAGE_TEXT.
+
+The output will be:
+
+```sql
+ERROR 1644 (45000): This is an error Occured
+
+```
+
+You can use it to raise errors for business logic or validation.It doesn't correspond to predefined database errors (like syntax errors or constraints violations).
+
+One more Example:
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION check_positive(value INT)
+RETURNS VARCHAR(50)
+BEGIN
+    IF value < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Negative values are not allowed';
+    END IF;
+
+    RETURN CONCAT('Value is valid: ', value);
+END //
+
+DELIMITER ;
+
+SELECT check_positive(-1);
+```
+
+result:```ERROR 1644 (45000): Negative values are not allowed```
+
+Other Common SQLSTATE Codes:
+
+1. 02000: No Data Found
+2. 23000: Integrity constraint violation
+3. 42000: Syntax error or access rule violation
+
+__The 45000 code is unique because it is reserved for custom exceptions raised using SIGNAL.__
