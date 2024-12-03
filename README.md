@@ -758,8 +758,8 @@ Key TCL commands in MySQL:
 5. Rolls back the transaction to the specified savepoint: ```ROLLBACK TO SAVEPOINT savepoint_name;```
 6. Removes a savepoint, making it no longer available for rollback: ```RELEASE SAVEPOINT savepoint_name; ```
 7. Controls whether changes are committed automatically. By default, MySQL operates in autocommit mode:
-    - SET AUTOCOMMIT = 0; /* Disable autocommit */
-    - SET AUTOCOMMIT = 1; /* Enable autocommit */
+    - ```SET AUTOCOMMIT = 0;``` /* Disable autocommit */
+    - ```SET AUTOCOMMIT = 1;``` /* Enable autocommit */
 
 Example of TCL: 
 
@@ -780,6 +780,11 @@ ROLLBACK TO SAVEPOINT before_deduction;
 SET AUTOCOMMIT = 1;
 COMMIT;
 ```
+In MySQL, functions are limited in their support for transactions because they cannot include statements that modify data (e.g., INSERT, UPDATE, or DELETE) or transaction-control statements like START TRANSACTION, COMMIT, or ROLLBACK. 
+These operations are not allowed in functions, as functions are intended for computations and returning a value.
+
+If you want to implement a transactional process, you'll need to use a stored procedure instead of a function.
+However, if your use case is strictly within a computational function, here's an example of what can be done.
 
 Let's make an example with function:
 
@@ -842,6 +847,8 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+CALL transfer_amount(101, 102, 200.00);
 
 ```
 
