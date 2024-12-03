@@ -4,6 +4,9 @@ A procedure in MySQL is a stored program or a set of SQL statements that are sto
 
 ![alt text](./public/images/images.jpg)
 
+Topics:
+- [Go to Introduction](#section-1-introduction)
+
 
 create procedure syntax:
 
@@ -729,3 +732,6 @@ Other Common SQLSTATE Codes:
 3. 42000: Syntax error or access rule violation
 
 __The 45000 code is unique because it is reserved for custom exceptions raised using SIGNAL.__
+
+
+# Section 1: Introduction
