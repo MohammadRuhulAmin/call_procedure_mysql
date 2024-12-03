@@ -11,7 +11,7 @@ Topics:
 - [JavaScript Object Notation](#section-4-json)
 - [User defined Function](#section-5-function)
 - [Error Handler](#section-6-error-handler)
-- [Tranaction Control Language](#section-7-transaction-control-language)
+- [Tranaction Control Language](#section-7-tcl)
 
 # Section 1: Procedure
 create procedure syntax:
@@ -745,7 +745,7 @@ __The 45000 code is unique because it is reserved for custom exceptions raised u
 
 
 
-# section 7: Transaction Control Language(TCL)
+# section 7: TCL
 
 Transaction Control Language (TCL) commands are used to manage transactions in a database. 
 Transactions allow you to execute multiple operations as a single, atomic unit, ensuring data integrity and consistency.
