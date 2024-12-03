@@ -11,7 +11,7 @@ Topics:
 - [JavaScript Object Notation](#section-4-json)
 - [User defined Function](#section-5-function)
 - [Error Handler](#section-6-error-handler)
-
+- [Tranaction Control Language](#section-7-transaction-control-language)
 
 # Section 1: Procedure
 create procedure syntax:
@@ -743,3 +743,6 @@ Other Common SQLSTATE Codes:
 __The 45000 code is unique because it is reserved for custom exceptions raised using SIGNAL.__
 
 
+
+
+# section 7: Transaction Control Language(TCL)
