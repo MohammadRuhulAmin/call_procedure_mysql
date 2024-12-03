@@ -612,3 +612,62 @@ Lets Drop a Function:
 ```sql
 DROP FUNCTION getMultipleRecordsFromQuery;
 ```
+
+# Error Handler:
+
+- The `HANDLER` is safety net for unanticipated SQL erros (if the function encounters a database-level error)
+- The `SIGNAL` is for anticipated, application-specific errors where you want fine-grained control over the error message.
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION example_function(input_value INT) RETURNS VARCHAR(50) DETERMINISTIC
+BEGIN
+    DECLARE result VARCHAR(50);
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION /* This defines a block to handle SQL execptions. In this example any SQL exception will trigger the 
+    handler, and a default message will be returned.('Error occured during processing') */
+        BEGIN
+            -- Handle the exception and set a default value or return an error
+            RETURN 'Error occurred during processing';
+        END;
+
+    -- Your main logic goes here
+    IF input_value < 0 THEN
+        SIGNAL SQLSTATE '45000' /* SIGNAL is used to raise a custom error */
+        SET MESSAGE_TEXT = 'Input value cannot be negative';
+    ELSE
+        SET result = CONCAT('Processed value: ', input_value);
+    END IF;
+
+    RETURN result;
+END //
+
+DELIMITER ;
+```
+
+without Handler, how the error will be looks like:
+
+```sql
+DELIMITER //
+CREATE FUNCTION safe_divisionx(numerator INT, denominator INT)
+RETURNS VARCHAR(50) DETERMINISTIC
+BEGIN
+    -- Validate the denominator
+    IF denominator = 0 THEN
+        -- Raise a custom error for division by zero
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Division by zero attempted in function';
+    END IF;
+    -- If valid, return the result
+    RETURN CONCAT('Result: ', numerator / denominator);
+END //
+DELIMITER ;
+SELECT safe_divisionx(1,0);
+
+```
+
+
+
+![alt text](./public/images/error.png)
+
+the `MESSAGE_TEXT` will be displayed in the sql Log, if you dont want to handle the error.
