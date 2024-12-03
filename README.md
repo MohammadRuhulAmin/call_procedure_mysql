@@ -5,9 +5,15 @@ A procedure in MySQL is a stored program or a set of SQL statements that are sto
 ![alt text](./public/images/images.jpg)
 
 Topics:
-- [Go to Introduction](#section-1-introduction)
+- [Procedure ](#section-1-procedure)
+- [While Loop](#section-2-while-loop)
+- [Conditional Statement](#section-3-conditional-statement)
+- [JavaScript Object Notation](#section-4-json)
+- [User defined Function](#section-5-function)
+- [Error Handler](#section-6-error-handler)
 
 
+# Section 1: Procedure
 create procedure syntax:
 
 ```sql
@@ -65,6 +71,7 @@ CALL my_procedure(10,'db_name','table_name',100);
 ```
 
 
+# Section 2: While Loop
 
 paramitarized loop with brake statement:
 
@@ -122,6 +129,7 @@ DELIMITER;
 CALL ex_loop();
 
 ```
+# Section 3: Conditional Statements
 
 If Else condition
 
@@ -163,6 +171,7 @@ SELECT @grade AS 'final result';
 
 ```
 
+# Section 4: JSON
 Before that we need to learn JSON:
 JSON stands for JavaScript Object Notation.
 
@@ -464,7 +473,7 @@ SELECT @resux;
 ```
 
 
-# Function In MySqL:
+# Section 5: Function
 
 Syntax:
 
@@ -616,7 +625,7 @@ Lets Drop a Function:
 DROP FUNCTION getMultipleRecordsFromQuery;
 ```
 
-# Error Handler:
+# Section 6: Error Handler
 
 - The `HANDLER` is safety net for unanticipated SQL erros (if the function encounters a database-level error)
 - The `SIGNAL` is for anticipated, application-specific errors where you want fine-grained control over the error message.
@@ -734,4 +743,3 @@ Other Common SQLSTATE Codes:
 __The 45000 code is unique because it is reserved for custom exceptions raised using SIGNAL.__
 
 
-# Section 1: Introduction
