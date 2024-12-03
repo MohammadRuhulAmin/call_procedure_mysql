@@ -746,3 +746,102 @@ __The 45000 code is unique because it is reserved for custom exceptions raised u
 
 
 # section 7: Transaction Control Language(TCL)
+
+Transaction Control Language (TCL) commands are used to manage transactions in a database. 
+Transactions allow you to execute multiple operations as a single, atomic unit, ensuring data integrity and consistency.
+
+Key TCL commands in MySQL:
+1. Begins a new transaction: ```START TRANSACTION;```
+2. Saves all the changes made during the current transaction: ```COMMIT;```
+3. Undoes all the changes made during the current transaction: ```ROLLBACK;```
+4. Creates a savepoint within a transaction, allowing partial rollbacks to a specific point: ```SAVEPOINT savepoint_name;```
+5. Rolls back the transaction to the specified savepoint: ```ROLLBACK TO SAVEPOINT savepoint_name;```
+6. Removes a savepoint, making it no longer available for rollback: ```RELEASE SAVEPOINT savepoint_name; ```
+7. Controls whether changes are committed automatically. By default, MySQL operates in autocommit mode:
+    - SET AUTOCOMMIT = 0; /* Disable autocommit */
+    - SET AUTOCOMMIT = 1; /* Enable autocommit */
+
+Example of TCL: 
+
+```sql
+-- Begins a new transaction 
+START TRANSACTION;
+-- Perform some operations
+SET AUTOCOMMIT = 0;
+INSERT INTO accounts (user_id, balance) VALUES (1, 500);
+UPDATE accounts SET balance = balance - 100 WHERE user_id = 2;
+-- Save a point in the transaction
+SAVEPOINT before_deduction;
+-- Perform another operation
+UPDATE accounts SET balance = balance + 100 WHERE user_id = 3;
+-- Rollback to the savepoint if needed
+ROLLBACK TO SAVEPOINT before_deduction;
+-- Commit the transaction
+SET AUTOCOMMIT = 1;
+COMMIT;
+```
+
+Let's make an example with function:
+
+```sql
+DELIMITER $$
+CREATE FUNCTION check_balance(
+    account_id INT,
+    required_amount DECIMAL(10,2)
+) RETURNS BOOLEAN
+DETERMINISTIC
+BEGIN
+    DECLARE current_balance DECIMAL(10,2);
+    -- Retrieve the current balance of the account
+    SELECT balance INTO current_balance
+    FROM accounts WHERE account_id = account_id;
+    -- Return true if the balance is sufficient, false otherwise
+    RETURN current_balance >= required_amount;
+END$$
+DELIMITER ;
+
+SELECT check_balance(101, 500.00) AS is_sufficient;
+```
+Now Let's make an example with store procedure:
+
+```sql
+DELIMITER $$
+CREATE PROCEDURE transfer_amount(
+    IN from_account INT,
+    IN to_account INT,
+    IN amount DECIMAL(10,2)
+)
+BEGIN
+    DECLARE insufficient_funds BOOLEAN;
+    -- Start the transaction
+    START TRANSACTION;
+    -- Check if the `from_account` has sufficient balance
+    SELECT balance < amount INTO insufficient_funds 
+    FROM accounts 
+    WHERE account_id = from_account;
+
+    IF insufficient_funds THEN
+        -- If insufficient funds, rollback and exit
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Insufficient funds';
+    ELSE
+        -- Deduct the amount from the sender's account
+        UPDATE accounts
+        SET balance = balance - amount
+        WHERE account_id = from_account;
+
+        -- Add the amount to the receiver's account
+        UPDATE accounts
+        SET balance = balance + amount
+        WHERE account_id = to_account;
+
+        -- Commit the transaction
+        COMMIT;
+    END IF;
+END$$
+
+DELIMITER ;
+
+```
+
