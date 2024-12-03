@@ -12,6 +12,7 @@ Topics:
 - [User defined Function](#section-5-function)
 - [Error Handler](#section-6-error-handler)
 - [Tranaction Control Language](#section-7-tcl)
+- [Data Migration Script using Store Procedure, TCL, Conditional Statements and Loop](#section-8-project)
 
 # Section 1: Procedure
 create procedure syntax:
@@ -851,4 +852,7 @@ DELIMITER ;
 CALL transfer_amount(101, 102, 200.00);
 
 ```
+
+# section 8: project
+
 
