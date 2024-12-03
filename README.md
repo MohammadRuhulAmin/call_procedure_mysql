@@ -129,7 +129,7 @@ DELIMITER;
 CALL ex_loop();
 
 ```
-# Section 3: Conditional Statements
+# Section 3: Conditional Statement
 
 If Else condition
 
