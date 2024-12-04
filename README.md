@@ -12,7 +12,8 @@ Topics:
 - [User defined Function](#section-5-function)
 - [Error Handler](#section-6-error-handler)
 - [Tranaction Control Language](#section-7-tcl)
-- [Data Migration Script using Store Procedure, TCL, Conditional Statements and Loop](#section-8-project)
+- [ACID](#section-8-acid)
+- [Data Migration Script using Store Procedure, TCL, Conditional Statements and Loop](#section-9-project)
 
 # Section 1: Procedure
 create procedure syntax:
@@ -853,7 +854,53 @@ CALL transfer_amount(101, 102, 200.00);
 
 ```
 
-# section 8: project
+# section 8: ACID
+
+ACID Stands for :
+- A(Atomicity) : A transaction is treated as a single, indivisible unit. It either completes entirely or does not happen at all. If any part of a 
+transaction fails, the entire transaction is rolled back.
+- If any part of a transaction fails, the entire transaction is rolled back.
+
+Example: 
+
+```sql
+-- Start the transaction
+START TRANSACTION;
+
+-- Step 1: Check balance (Ensure sufficient funds exist)
+SET @account_id = 1; -- Account ID to withdraw from
+SET @withdraw_amount = 300; -- Withdrawal amount
+
+-- Fetch the current balance
+SELECT balance INTO @current_balance
+FROM accounts
+WHERE id = @account_id;
+
+-- Check if balance is sufficient
+IF @current_balance >= @withdraw_amount THEN
+    -- Step 2: Deduct amount from account balance
+    UPDATE accounts
+    SET balance = balance - @withdraw_amount
+    WHERE id = @account_id;
+
+    -- Step 3: Commit the transaction
+    COMMIT;
+    SELECT 'Withdrawal successful!' AS status;
+ELSE
+    -- Insufficient funds: Rollback
+    ROLLBACK;
+    SELECT 'Insufficient balance. Transaction failed!' AS status;
+END IF;
+
+
+```
+
+- point 1. Use a stored procedure for encapsulating the logic.
+- point 2. Handle edge cases (e.g., account not found).
+- point 3. Log transaction details for auditing.
+
+
+# section 9: project
 
 - STEP 1: [Data migration from Source Database to Destination Database in 9 tables using a procedure.](https://github.com/MohammadRuhulAmin/call_procedure_mysql/blob/main/project/chx_data_migration_procedure.sql)
 - STEP 2: [Create a procedure using loop to run the STEP 1 Procedure, created.](https://github.com/MohammadRuhulAmin/call_procedure_mysql/blob/main/project/procedure_running_loop.sql)
