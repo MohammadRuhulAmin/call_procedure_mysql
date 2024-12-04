@@ -857,8 +857,7 @@ CALL transfer_amount(101, 102, 200.00);
 # section 8: ACID
 
 ACID Stands for :
-- A(Atomicity) : A transaction is treated as a single, indivisible unit. It either completes entirely or does not happen at all. If any part of a 
-transaction fails, the entire transaction is rolled back.
+- A(Atomicity) : A transaction is treated as a single, indivisible unit. It either completes entirely or does not happen at all.
 - If any part of a transaction fails, the entire transaction is rolled back.
 
 Example: 
