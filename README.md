@@ -895,7 +895,7 @@ END IF;
 
 ```
 
-- point 1. Use a stored procedure for encapsulating the logic.
+- point 1. [Use a stored procedure for encapsulating the logic.](https://github.com/MohammadRuhulAmin/call_procedure_mysql/blob/main/acid/atomicity_procedure.sql)
 - point 2. Handle edge cases (e.g., account not found).
 - point 3. Log transaction details for auditing.
 
