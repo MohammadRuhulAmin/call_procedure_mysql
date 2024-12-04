@@ -899,6 +899,146 @@ END IF;
 - point 2. Handle edge cases (e.g., account not found).
 - point 3. Log transaction details for auditing.
 
+- C(Consistency): Ensures the database remains in a valid state before and after transaction. All rules, constraints and relationships must be 
+  preserved.
+Example:
+```sql
+-- Start the transaction
+START TRANSACTION;
+
+-- Step 1: Deduct $500 from Alice's account (id = 1)
+UPDATE accounts
+SET balance = balance - 500
+WHERE id = 1;
+
+-- Step 2: Add $500 to Bob's account (id = 2)
+UPDATE accounts
+SET balance = balance + 500
+WHERE id = 2;
+
+-- Step 3: Check consistency (total balance must remain the same)
+SET @total_balance := 0;
+
+SELECT SUM(balance) INTO @total_balance
+FROM accounts;
+
+-- Assume the initial total balance is 1500
+IF @total_balance = 1500 THEN
+    -- Commit the transaction if consistent
+    COMMIT;
+    SELECT 'Transaction successful and consistent!' AS status;
+ELSE
+    -- Rollback if inconsistency detected
+    ROLLBACK;
+    SELECT 'Transaction failed due to inconsistency!' AS status;
+END IF;
+
+```
+
+- I(Isolation): Ensures that concurrent transactions do not interfere with each other.The transaction isolation level determines how a transaction interacts with other concurrent transactions. In this example, we'll focus on the REPEATABLE READ isolation level and illustrate how it works.MySQL uses isolation levels to manage concurrency:
+READ UNCOMMITTED: Transactions can read uncommitted changes from other transactions.
+READ COMMITTED: Transactions see only committed changes.
+REPEATABLE READ (Default in MySQL): Ensures consistent reads during a transaction.
+SERIALIZABLE: Transactions are completely isolated.
+
+
+
+Let's Create an Example:
+
+step 1: create the accounts table:
+```sql
+
+CREATE TABLE accounts (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    balance DECIMAL(10, 2) NOT NULL
+) ENGINE=InnoDB;
+
+-- Insert sample data
+INSERT INTO accounts (id, name, balance) VALUES
+(1, 'Alice', 1000.00),
+(2, 'Bob', 500.00);
+
+```
+
+step 2: Enable REPEATABLE READ Isolation Level:
+
+```sql
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+```
+Scenario: Concurrent Transactions
+We will simulate two transactions:
+    Transaction A: Reads Alice's balance and tries to process it.
+    Transaction B: Updates Alice's balance during Transaction A's execution.
+
+Transaction A (First Session)
+
+```sql
+-- Set isolation level for Transaction A
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+-- Start Transaction A
+START TRANSACTION;
+-- Step 1: Read Alice's balance
+SELECT balance FROM accounts WHERE id = 1; -- Returns 1000.00
+-- Step 2: Perform some business logic (e.g., withdraw $300)
+UPDATE accounts SET balance = balance - 300 WHERE id = 1;
+-- Do NOT commit yet; keep transaction open
+```
+
+
+Transaction B (Second Session)
+
+```sql
+-- Start Transaction B
+START TRANSACTION;
+-- Step 1: Update Alice's balance directly
+UPDATE accounts SET balance = balance + 200 WHERE id = 1; -- Adds $200 to the balance
+-- Commit Transaction B
+COMMIT;
+
+```
+
+Transaction A resumes (First Session)
+Transaction A attempts to read Alice's balance again:
+```sql
+-- Step 3: Check Alice's balance again
+SELECT balance FROM accounts WHERE id = 1; -- Still returns 1000.00 (unchanged due to REPEATABLE READ)
+-- Step 4: Commit Transaction A
+COMMIT;
+```
+
+```sql
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+START TRANSACTION;
+SELECT balance FROM accounts WHERE id = 1; -- Consistent read
+
+```
+
+Explanation of the Results:
+1. Initial Balance: Alice's balance starts at $1000
+2. Transaction Isolation (REPEATABLE READ)
+    1. Transaction A sees Alice's balance as $1000 throughout its execution, even though Transaction B modifies the balance.
+    2. This is because REPEATABLE READ ensures that all reads within a transaction see the same snapshot of the data at the start of the transaction.
+3. After Transaction A commits, Alice’s balance is reduced by $300, making it $900.
+4. Transaction B had already increased the balance by $200, making the final balance $1100.
+
+
+`Repeatable Read`: Ensures that data read during a transaction remains consistent, even if other transactions modify the same data.
+`Prevention of Non-Repeatable Reads`: This isolation level prevents cases where data read once is modified by another transaction and appears different when read again within the same transaction.
+
+`READ UNCOMMITTED`: Allows dirty reads, where one transaction can see uncommitted changes from another transaction.
+`READ COMMITTED`: Each SELECT statement sees the most recent committed data, even if it changes during the transaction.
+`SERIALIZABLE`:The strictest isolation level, ensuring full transaction isolation by locking rows for the duration of the transaction.
+
+
+
+- D(Durability): Ensures that once a transaction is committed, changes are permanent, even in case of a system failure.MySQL achieves durability through its storage engine (e.g., InnoDB) by logging changes.
+
+
+[For more on ACID](https://www.geeksforgeeks.org/acid-properties-in-dbms/)
+
+
 
 # section 9: project
 
